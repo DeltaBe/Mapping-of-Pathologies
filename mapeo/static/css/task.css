@@ -1,0 +1,93 @@
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.task-container {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.task-container h1 {
+  color: #3aafa9;
+  font-size: 2em;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.task-container label {
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.task-container input[type="file"],
+.task-container input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #3aafa9;
+  border-radius: 6px;
+  background-color: #2a2a2a;
+  color: #ffffff;
+  font-size: 1em;
+}
+
+.task-container input[type="file"]::file-selector-button {
+  background-color: #3aafa9;
+  border: none;
+  padding: 10px 15px;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.task-container input[type="file"]::file-selector-button:hover {
+  background-color: #2b7a78;
+}
+
+.task-container button {
+  margin-top: 30px;
+  width: 100%;
+  padding: 14px;
+  background-color: #3aafa9;
+  border: none;
+  color: white;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.task-container button:hover {
+  background-color: #2b7a78;
+}
+
+.mensaje {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.mensaje-exito {
+  background-color: #1f443a;
+  color: #a8f0c6;
+}
+
+.mensaje-error {
+  background-color: #442121;
+  color: #f0a8a8;
+}

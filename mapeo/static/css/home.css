@@ -1,0 +1,54 @@
+body {
+  background-color: #1c1c1c;
+  color: #f5f5f5;
+}
+
+.inicio-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #2c2c2c;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.bienvenida h1 {
+  font-size: 2em;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.bienvenida p {
+  font-size: 1.1em;
+  color: #cccccc;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.info-extra {
+  margin-top: 30px;
+}
+
+.info-extra h2 {
+  font-size: 1.5em;
+  color: #3ddad7;
+  margin-bottom: 15px;
+}
+
+.info-extra ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.info-extra li {
+  font-size: 1.1em;
+  margin-bottom: 12px;
+  background: rgba(61, 218, 215, 0.1);
+  padding: 12px;
+  border-left: 5px solid #3ddad7;
+  border-radius: 8px;
+  color: #e0f7f7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

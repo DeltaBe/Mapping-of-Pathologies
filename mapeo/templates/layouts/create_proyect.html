@@ -1,0 +1,15 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="upload-container">
+    <h2>Subir archivo de datos oncológicos</h2>
+    <form method="POST" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-subir">Subir y generar mapa</button>
+    </form>
+</div>
+{% endblock %}

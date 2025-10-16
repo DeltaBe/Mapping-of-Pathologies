@@ -1,0 +1,99 @@
+/* Fondo general oscuro para el contenedor */
+.tabla-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  background-color: #1e1e2f; /* Fondo oscuro */
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Segoe UI', sans-serif;
+  color: #f1f1f1; /* Texto claro */
+}
+
+/* Título */
+.tabla-container h1 {
+  color: #5df2d6; /* Color brillante */
+  font-size: 2em;
+  margin-bottom: 25px;
+}
+
+/* Formulario */
+.tabla-container form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabla-container input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  background-color: #2a2a3b;
+  color: #ffffff;
+  border: 1px solid #444;
+  border-radius: 6px;
+}
+
+/* Botones */
+.tabla-container button {
+  background-color: #00bfa6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.tabla-container button:hover {
+  background-color: #008c7e;
+}
+
+/* Botón rojo (Limpiar) */
+.tabla-container .btn-rojo {
+  background-color: #c62828;
+}
+
+.tabla-container .btn-rojo:hover {
+  background-color: #a31515;
+}
+
+/* Tabla */
+.tabla-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #2a2a3b;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabla-container th, .tabla-container td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #444;
+  text-align: left;
+}
+
+.tabla-container th {
+  background-color: #00bfa6;
+  color: #fff;
+}
+
+.tabla-container tr:nth-child(even) {
+  background-color: #1f1f2e;
+}
+
+.tabla-container tr:nth-child(odd) {
+  background-color: #29293f;
+}
+
+/* Mensaje sin resultados */
+.sin-resultados {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ffe082;
+  color: #4e342e;
+  border-left: 6px solid #ffb300;
+  border-radius: 8px;
+  font-weight: bold;
+}

@@ -1,0 +1,146 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #1d1d1b;
+    color: #f5f0e1;
+}
+
+.imss-header {
+    background-color: #1d1d1b;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.imss-logo-banner {
+    max-width: 100%;
+    height: auto;
+}
+
+.main-nav-imss {
+    background-color: #2c2c29;
+    padding: 10px 20px;
+    border-top: 1px solid #777;
+    border-bottom: 1px solid #777;
+}
+
+.main-nav-imss ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.main-nav-imss li {
+    display: inline;
+}
+
+.main-nav-imss a {
+    color: #b4e1d3;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 6px;
+    display: inline-block;
+
+    /* Transiciones suaves */
+    transition: 
+        background-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease,
+        opacity 0.3s ease;
+}
+
+.main-nav-imss a:hover {
+    background-color: #3e3e3c;
+    color: #f4e7cb;
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Distribución general: mapa a la izquierda, panel a la derecha */
+.contenedor-principal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #f5f5f5; /* fondo neutro */
+}
+
+.mapa-o-contenido {
+  flex: 1;
+  margin-right: 20px;
+}
+
+/* Panel lateral derecho */
+.panel-derecho {
+  width: 320px;
+  position: sticky;
+  top: 20px;
+}
+
+/* Tarjeta estilo IMSS-BIENESTAR */
+.tarjeta-cie {
+  background-color: #2f2f2f; /* oscuro, como tu imagen */
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.tarjeta-cie h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffe0b2; /* color arena similar al de IMSS-BIENESTAR */
+}
+
+.subtitulo {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #ddd;
+}
+
+.entrada-cie {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  color: #333;
+  background-color: #fefefe;
+  margin-bottom: 15px;
+}
+
+/* Botones */
+.acciones {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-generar,
+.btn-limpiar {
+  background-color: #3ba68a; /* verde IMSS */
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.btn-generar:hover {
+  background-color: #2f8670;
+}
+
+.btn-limpiar {
+  background-color: #a63b3b;
+}
+
+.btn-limpiar:hover {
+  background-color: #7c2a2a;
+}

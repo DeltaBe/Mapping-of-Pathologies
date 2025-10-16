@@ -1,0 +1,49 @@
+
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="cie-ayuda-container">
+  <h1>¿Qué es una Clave CIE?</h1>
+  <p>
+    La <strong>Clasificación Internacional de Enfermedades (CIE)</strong> es un sistema estándar desarrollado por la <strong>Organización Mundial de la Salud (OMS)</strong> para codificar y clasificar enfermedades, trastornos, síntomas, hallazgos anormales, quejas, causas externas de lesiones y enfermedades, y factores que influyen en el estado de salud. Se utiliza mundialmente en hospitales, registros clínicos, estudios epidemiológicos y estadísticas de salud pública.
+  </p>
+
+  <h2>¿Para qué sirve una clave CIE?</h2>
+  <ul>
+    <li>Facilita la recolección y comparación internacional de datos sanitarios.</li>
+    <li>Permite el seguimiento de la incidencia y prevalencia de enfermedades.</li>
+    <li>Estándar para codificación clínica y facturación médica.</li>
+    <li>Es utilizada en investigación médica, salud pública y políticas de salud.</li>
+  </ul>
+
+  <h2>¿Cómo está estructurada?</h2>
+  <p>
+    La versión actual más utilizada es la <strong>CIE-10</strong> (Décima Revisión), aunque algunos países ya implementan la <strong>CIE-11</strong>. Las claves CIE-10 tienen una estructura alfanumérica:
+  </p>
+
+  <ul>
+    <li><strong>Letra inicial:</strong> Indica la categoría general o el sistema del cuerpo (ej. <code>C</code> para neoplasias).</li>
+    <li><strong>Dos dígitos:</strong> Indican un grupo específico dentro de esa categoría.</li>
+    <li><strong>Opcionalmente, un punto seguido de un número:</strong> Especifica más detalles (subcategorías).</li>
+  </ul>
+
+  <p><strong>Ejemplos de claves CIE-10:</strong></p>
+  <ul>
+    <li><code>C50.9</code>: Neoplasia maligna de mama, no especificada.</li>
+    <li><code>J18.9</code>: Neumonía, no especificada.</li>
+    <li><code>E11.9</code>: Diabetes mellitus tipo 2 sin complicaciones.</li>
+    <li><code>K35.2</code>: Apendicitis aguda con peritonitis generalizada.</li>
+    <li><code>C15</code>: Cáncer de esófago.</li>
+  </ul>
+
+  <h2>¿Cómo usar las claves en esta plataforma?</h2>
+  <p>
+    Puedes ingresar una clave como <code>C50</code> o <code>C15</code> en el buscador del mapa interactivo para visualizar los casos reportados en distintos municipios. La plataforma buscará todos los registros cuyo código <strong>comience</strong> con la clave proporcionada.
+  </p>
+
+  <div class="alerta-importante">
+    ⚠️ Nota: Ingresa solo los primeros tres o cuatro caracteres de la clave para resultados más amplios. Ejemplo: <code>C50</code> buscará todos los tipos de cáncer de mama.
+  </div>
+</div>
+{% endblock %}

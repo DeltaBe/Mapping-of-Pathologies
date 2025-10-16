@@ -1,0 +1,42 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="tabla-container">
+  <h1>Casos por CIE10: {{ cie_id }}</h1>
+
+  <form method="POST" class="formulario-cie">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn-filtrar">Buscar</button>
+    <a href="{% url 'create_task' %}" class="btn-limpiar">Limpiar</a>
+  </form>
+
+  {% if datos %}
+    <table class="tabla-datos">
+      <thead>
+        <tr>
+          <th>Estado</th>
+          <th>Municipio</th>
+          <th>Sexo</th>
+          <th>Clave CIE10</th>
+          <th>Total de Casos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in datos %}
+          <tr>
+            <td>{{ fila.estado }}</td>
+            <td>{{ fila.municipio }}</td>
+            <td>{{ fila.sexo }}</td>
+            <td>{{ fila.id_cie10 }}</td>
+            <td>{{ fila.total_casos }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No se encontraron datos para la clave CIE proporcionada.</p>
+  {% endif %}
+</div>
+{% endblock %}

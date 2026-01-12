@@ -40,19 +40,27 @@ def index(request):
 
 
 def about(request):
-   cie_id = "C50"  # Valor por defecto
-   if request.method == "POST":
+    cie_id = "C50"  # Valor por defecto
+    municipio = None  # Sin municipio por defecto
+    
+    # Verificar si el formulario fue enviado con POST
+    if request.method == "POST":
         cie_id = request.POST.get("cie_id", "C50")
-
-   nombre_archivo = f"mapa.html"
-   ruta_completa = os.path.join(settings.BASE_DIR, 'mapeo', 'static', nombre_archivo)
-
-    # Generar el nuevo mapa con ese ID CIE
-   generar_mapa_por_cie(cie_id, ruta_salida=ruta_completa)
-
-   return render(request, 'about.html', {
+        municipio = request.POST.get("municipio", None)  # Obtener el municipio desde el formulario
+    
+    nombre_archivo = f"mapa.html"
+    ruta_completa = os.path.join(settings.BASE_DIR, 'mapeo', 'static', nombre_archivo)
+    
+    # Generar el nuevo mapa con el ID CIE y municipio si se ha seleccionado
+    if municipio:
+        generar_mapa_por_cie(cie_id, municipio=municipio, ruta_salida=ruta_completa)
+    else:
+        generar_mapa_por_cie(cie_id, ruta_salida=ruta_completa)
+    
+    return render(request, 'about.html', {
         'mapa_file': nombre_archivo,
-        'cie_id': cie_id
+        'cie_id': cie_id,
+        'municipio': municipio  # Pasar el municipio a la plantilla
     })
 #funcion que nos permite devolver un parametro
 def hello(request,username):

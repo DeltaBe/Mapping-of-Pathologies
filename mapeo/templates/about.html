@@ -24,11 +24,12 @@
     flex-direction: column;
     justify-content: space-between;
   ">
-    <form method="POST" action="">
-      {% csrf_token %}
-      <div class="tarjeta-cie" style="display: flex; flex-direction: column; gap: 15px;">
+  <form method="POST" action="">
+    {% csrf_token %}
+    <div class="tarjeta-cie" style="display: flex; flex-direction: column; gap: 15px;">
         <h4 style="margin: 0;">Seleccionar enfermedad por clave CIE</h4>
         <p class="subtitulo" style="font-size: 0.9em; color: #555;">Búsqueda personalizada</p>
+        
         <input 
           type="text" 
           name="cie_id" 
@@ -37,24 +38,33 @@
           value="{{ cie_id }}"
           style="padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
 
+        <input 
+          type="text" 
+          name="municipio" 
+          class="entrada-cie" 
+          placeholder="Ej. Tuxtla Gutierrez" 
+          value="{{ municipio }}"
+          style="padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+
         <div class="acciones" style="display: flex; justify-content: space-between; gap: 10px;">
-          <button 
-            type="submit" 
-            class="btn-generar" 
-            title="Buscar"
-            style="flex: 1; background-color: #2b7a78; color: white; border: none; border-radius: 6px; padding: 10px;">
-            🔍 Buscar
-          </button>
-          <a 
-            href="{% url 'about' %}" 
-            class="btn-limpiar" 
-            title="Limpiar"
-            style="flex: 1; background-color: #f76c6c; color: white; text-align: center; border: none; border-radius: 6px; padding: 10px; text-decoration: none;">
-            🗑️ Limpiar
-          </a>
+            <button 
+              type="submit" 
+              class="btn-generar" 
+              title="Buscar"
+              style="flex: 1; background-color: #2b7a78; color: white; border: none; border-radius: 6px; padding: 10px;">
+                🔍 Buscar
+            </button>
+            <a 
+              href="{% url 'about' %}" 
+              class="btn-limpiar" 
+              title="Limpiar"
+              style="flex: 1; background-color: #f76c6c; color: white; text-align: center; border: none; border-radius: 6px; padding: 10px; text-decoration: none;">
+                🗑️ Limpiar
+            </a>
         </div>
-      </div>
-    </form>
+    </div>
+</form>
+
   </aside>
 </div>
 {% endblock %}

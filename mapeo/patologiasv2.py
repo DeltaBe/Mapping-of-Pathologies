@@ -66,34 +66,47 @@ def cargar_datos_geograficos(ruta_geojson, columna_nombre='mun_name'):
     gdf = gdf.rename(columns={columna_nombre: 'mun_name'})
     return gdf
 
-def generar_mapa_por_cie(cie_id, ruta_salida):
+def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
+    # Definir rutas de los GeoJSON
     ruta_geojson_chiapas = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\Chiapas_geo.geojson'
     ruta_geojson_oaxaca = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\datos_geograficos_Oaxaca.geojson'
 
+    # Obtener datos por CIE
     df = obtener_datos_por_cie(cie_id)
+    
+    # Filtrar por municipio si es proporcionado
+    if municipio:
+        df = df[df['municipio'] == municipio.upper()]
+
+    # Cargar los datos geográficos de los archivos GeoJSON
     gdf_chiapas = cargar_datos_geograficos(ruta_geojson_chiapas)
     gdf_oaxaca = cargar_datos_geograficos(ruta_geojson_oaxaca)
     gdf = pd.concat([gdf_chiapas, gdf_oaxaca], ignore_index=True)
 
+    # Realizar la unión entre los datos geográficos y los datos de la base de datos
     combinado = gdf.merge(df, how='left', left_on='mun_name', right_on='municipio')
 
+    # Crear el mapa
     mapa = fm.Map(location=[17.0, -95.0], zoom_start=6, tiles='cartodbpositron')
 
+    # Verificar si hay casos y añadir la capa de colores
     if combinado['total_casos'].notna().any():
         min_casos = combinado['total_casos'].min()
         max_casos = combinado['total_casos'].max()
         punto_bajo = min_casos + (max_casos - min_casos) * 0.33
         punto_medio = min_casos + (max_casos - min_casos) * 0.66
 
+        # Crear el colormap para visualizar los casos
         colormap = cm.StepColormap(
             ['blue', 'yellow', 'red'],
             index=[min_casos, punto_bajo, punto_medio, max_casos],
             vmin=min_casos,
             vmax=max_casos,
-            caption='Total de casos de cáncer de mama' # 
+            caption='Total de casos de cáncer de mama'
         )
         colormap.add_to(mapa)
 
+        # Añadir los marcadores al mapa
         for _, row in combinado.iterrows():
             if pd.notnull(row.get('total_casos')):
                 centroide = row['geometry'].centroid
@@ -108,4 +121,5 @@ def generar_mapa_por_cie(cie_id, ruta_salida):
                     tooltip=row['mun_name']
                 ).add_to(mapa)
 
+    # Guardar el mapa en el archivo de salida
     mapa.save(ruta_salida)

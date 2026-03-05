@@ -35,6 +35,15 @@ class CIE10Form(forms.Form):
         })
     )
     
+
+class MunicipioFilterForm(forms.Form):
+    municipio = forms.CharField(
+        label='Seleccionar Municipio', 
+        max_length=100, 
+        required=False
+    )
+
+    
     
 
 

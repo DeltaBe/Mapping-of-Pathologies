@@ -68,8 +68,14 @@ def cargar_datos_geograficos(ruta_geojson, columna_nombre='mun_name'):
 
 def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
     # Definir rutas de los GeoJSON
+<<<<<<< HEAD
     ruta_geojson_chiapas = 'C:/Users/mende/OneDrive/Documentos/ING. SOFTWARE/SEGUNDO AÑO/Estancia I/Estancia2/Proyecto/Mapping-of-Pathologies/mapeo/static/Chiapas_geo.geojson'
     ruta_geojson_oaxaca = 'C:/Users/mende/OneDrive/Documentos/ING. SOFTWARE/SEGUNDO AÑO/Estancia I/Estancia2/Proyecto/Mapping-of-Pathologies/mapeo/static/datos_geograficos_Oaxaca.geojson'
+=======
+    ruta_geojson_chiapas = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\Chiapas_geo.geojson'
+    ruta_geojson_oaxaca = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\datos_geograficos_Oaxaca.geojson'
+
+>>>>>>> 378a23d1291d95908e3894c1825ed0374a1f15b8
     # Obtener datos por CIE
     df = obtener_datos_por_cie(cie_id)
     
@@ -121,4 +127,8 @@ def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
                 ).add_to(mapa)
 
     # Guardar el mapa en el archivo de salida
+<<<<<<< HEAD
     mapa.save(ruta_salida)
+=======
+    mapa.save(ruta_salida)
+>>>>>>> 378a23d1291d95908e3894c1825ed0374a1f15b8

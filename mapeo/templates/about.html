@@ -2,59 +2,67 @@
 {% load static %}
 
 {% block content %}
-<div class="contenedor-principal" style="display: flex; gap: 20px; margin: 20px;">
-  <!-- Mapa centrado -->
-  <div class="mapa-o-contenido" style="flex: 1;">
-    <iframe 
-      src="{% static mapa_file %}?v={{ cie_id }}" 
-      width="100%" 
-      height="600" 
-      style="border: 2px solid #ccc; border-radius: 10px;">
-    </iframe>
-  </div>
+<div class="contenedor-principal">
 
-  <!-- Panel lateral derecho -->
-  <aside class="panel-derecho" style="
-    width: 300px;
-    background-color: #f0f4f8;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  ">
-    <form method="POST" action="">
-      {% csrf_token %}
-      <div class="tarjeta-cie" style="display: flex; flex-direction: column; gap: 15px;">
-        <h4 style="margin: 0;">Seleccionar enfermedad por clave CIE</h4>
-        <p class="subtitulo" style="font-size: 0.9em; color: #555;">Búsqueda personalizada</p>
-        <input 
-          type="text" 
-          name="cie_id" 
-          class="entrada-cie" 
-          placeholder="Ej. C50" 
-          value="{{ cie_id }}"
-          style="padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
-
-        <div class="acciones" style="display: flex; justify-content: space-between; gap: 10px;">
-          <button 
-            type="submit" 
-            class="btn-generar" 
-            title="Buscar"
-            style="flex: 1; background-color: #2b7a78; color: white; border: none; border-radius: 6px; padding: 10px;">
-            🔍 Buscar
-          </button>
-          <a 
-            href="{% url 'about' %}" 
-            class="btn-limpiar" 
-            title="Limpiar"
-            style="flex: 1; background-color: #f76c6c; color: white; text-align: center; border: none; border-radius: 6px; padding: 10px; text-decoration: none;">
-            🗑️ Limpiar
-          </a>
-        </div>
+  <!--  MAPA PRINCIPAL -->
+  <section class="mapa-o-contenido">
+    <div class="map-card">
+      <div class="map-header">
+        <h3> Mapa Epidemiológico por CIE</h3>
+        <span class="map-badge">
+          {{ cie_id|default:"Todas las claves" }}
+        </span>
       </div>
-    </form>
+
+      <iframe
+        src="{% static mapa_file %}?v={{ cie_id }}"
+        width="100%"
+        height="650"
+        loading="lazy">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- PANEL DERECHO -->
+  <aside class="panel-derecho">
+    <div class="tarjeta-cie">
+
+      <h4>Filtro por Clave CIE</h4>
+      <p class="subtitulo">Visualización personalizada</p>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <input
+          type="text"
+          name="cie_id"
+          class="entrada-cie"
+          placeholder="Ej. C50"
+          value="{{ cie_id }}">
+
+        <div class="acciones">
+          <button type="submit">
+          🔍 Buscar
+        </button>
+
+        <a href="{% url 'create_task' %}" class="btn-rojo text-decoration-none text-center">
+          🗑️ Limpiar
+        </a>
+
+        </div>
+      </form>
+
+      <div class="cie-ayuda">
+        <p>Ejemplos frecuentes:</p>
+        <ul>
+          <li>C50 – Mama</li>
+          <li>C18 – Colon</li>
+          <li>C34 – Pulmón</li>
+        </ul>
+      </div>
+
+    </div>
   </aside>
+
 </div>
 {% endblock %}

@@ -1,93 +1,119 @@
-body {
-  background-color: #121212;
-  color: #ffffff;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0;
+/* ===== Fondo ===== */
+body{
+    background-color:#1c1c1c;
+    color:#e6e6e6;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.task-container {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+/* ===== Contenedor ===== */
+.task-container{
+
+    max-width:900px;
+    margin:60px auto;
+    padding:45px;
+
+    background:#1c1c1c;
+
+    border-radius:10px;
+
+    /* borde elegante */
+    border-left:6px solid #19b39b;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.6);
 }
 
-.task-container h1 {
-  color: #3aafa9;
-  font-size: 2em;
-  margin-bottom: 30px;
-  text-align: center;
+/* ===== TITULO ===== */
+.task-container h1{
+    color:#19b39b;
+    font-size:2.2rem;
+    margin-bottom:35px;
 }
 
-.task-container label {
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 8px;
-  color: #ffffff;
-  font-weight: 600;
+/* ===== FORM ===== */
+form{
+    display:flex;
+    flex-direction:column;
+    gap:24px;
 }
 
-.task-container input[type="file"],
-.task-container input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #3aafa9;
-  border-radius: 6px;
-  background-color: #2a2a2a;
-  color: #ffffff;
-  font-size: 1em;
+/* Grupo label + input */
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
 }
 
-.task-container input[type="file"]::file-selector-button {
-  background-color: #3aafa9;
-  border: none;
-  padding: 10px 15px;
-  color: white;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
+/* LABEL (Ej: CIE-10) */
+label{
+    font-weight:600;
+    color:#b9c4cc;
 }
 
-.task-container input[type="file"]::file-selector-button:hover {
-  background-color: #2b7a78;
+/* INPUTS */
+input, select, textarea{
+
+    padding:15px;
+
+    border-radius:8px;
+    border:1.8px solid #1f2a33;
+
+    background:#0e1114;
+    color:#ffffff;
+
+    font-size:1rem;
+
+    transition:.25s;
 }
 
-.task-container button {
-  margin-top: 30px;
-  width: 100%;
-  padding: 14px;
-  background-color: #3aafa9;
-  border: none;
-  color: white;
-  font-size: 1.1em;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+/* efecto profesional */
+input:focus,
+select:focus,
+textarea:focus{
+
+    outline:none;
+    border-color:#19b39b;
+
+    box-shadow:0 0 0 3px rgba(25,179,155,.15);
 }
 
-.task-container button:hover {
-  background-color: #2b7a78;
+/* ===== BOTÓN GRANDE ===== */
+
+button{
+
+    margin-top:10px;
+    padding:18px;
+
+    font-size:1.2rem;
+    font-weight:bold;
+
+    background:#0f6b5a;
+    color:white;
+
+    border:none;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.3s;
 }
 
-.mensaje {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-align: center;
+/* Hover elegante */
+button:hover{
+    background:#19b39b;
 }
 
-.mensaje-exito {
-  background-color: #1f443a;
-  color: #a8f0c6;
+/* Click */
+button:active{
+    transform:scale(.98);
 }
 
-.mensaje-error {
-  background-color: #442121;
-  color: #f0a8a8;
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:768px){
+
+    .task-container{
+        margin:20px;
+        padding:30px;
+    }
+
 }

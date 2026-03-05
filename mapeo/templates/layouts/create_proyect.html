@@ -2,14 +2,62 @@
 {% load static %}
 
 {% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center align-items-center min-vh-75">
+    <div class="col-12 col-md-8 col-lg-6">
 
+      <!-- Card principal -->
+      <div class="card border-0 rounded-3 shadow"
+           style="background-color: #1c1c1c;">
 
-<div class="upload-container">
-    <h2>Subir archivo de datos oncológicos</h2>
-    <form method="POST" >
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn-subir">Subir y generar mapa</button>
-    </form>
+        <!-- Header -->
+        <div class="card-header text-center py-4 border-0"
+             style="background-color: #1c1c1c;">
+          <h2 class="fw-semibold mb-2"
+              style="color: #2dd4bf;">
+            ¿Qué puedes hacer aquí?
+          </h2>
+          <p class="mb-0"
+             style="color: #cbd5e1;">
+            Carga datos oncológicos y genera mapas interactivos
+          </p>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4 p-md-5"
+             style="background-color: #1c1c1c;">
+
+          <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-4 text-light">
+              {{ form.as_p }}
+            </div>
+
+            <div class="d-grid">
+              <button type="submit"
+                      class="btn btn-lg fw-semibold"
+                      style="
+                        background-color: #00695c;
+                        color: #ffffff;
+                        border-radius: 8px;
+                        border: none;
+                      ">
+                Subir archivo y generar mapa
+              </button>
+            </div>
+          </form>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer text-center small border-0"
+             style="background-color: #1c1c1c; color: #9ca3af;">
+          Plataforma de visualización de patologías oncológicas
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

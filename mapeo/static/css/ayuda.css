@@ -1,5 +1,4 @@
-
-
+/* Contenedor principal para la ayuda de CIE */
 .cie-ayuda-container {
   max-width: 850px;
   margin: 40px auto;
@@ -8,47 +7,55 @@
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(0, 255, 255, 0.05);
   line-height: 1.7;
+  background-color: #1e1e1e; /* Color de fondo oscuro */
 }
 
+/* Títulos principales */
 .cie-ayuda-container h1 {
-  color: #00d3b3;
+  color: #00d3b3; /* Verde */
   font-size: 2.4em;
   margin-bottom: 20px;
 }
 
+/* Subtítulos */
 .cie-ayuda-container h2 {
-  color: #3ddad7;
+  color: #3ddad7; /* Azul */
   margin-top: 30px;
   font-size: 1.5em;
 }
 
+/* Párrafos */
 .cie-ayuda-container p {
   margin-top: 10px;
-  color: #cfd8dc;
+  color: #cfd8dc; /* Gris claro */
 }
 
+/* Listas dentro de la sección */
 .cie-ayuda-container ul {
   margin-top: 15px;
   padding-left: 25px;
 }
 
+/* Elementos de las listas */
 .cie-ayuda-container li {
   margin-bottom: 10px;
-  color: #b0bec5;
+  color: #b0bec5; /* Gris oscuro */
 }
 
+/* Estilo para elementos de código */
 .code, code {
-  background-color: #263238;
+  background-color: #263238; /* Fondo oscuro */
   padding: 3px 6px;
   font-family: monospace;
   border-radius: 4px;
-  color: #ffffff;
+  color: #ffffff; /* Color blanco */
 }
 
+/* Alerta importante */
 .alerta-importante {
-  background-color: #2b2b2b;
-  color: #ffcc80;
-  border-left: 6px solid #ffb74d;
+  background-color: #2b2b2b; /* Fondo más oscuro */
+  color: #ffcc80; /* Amarillo */
+  border-left: 6px solid #ffb74d; /* Borde izquierdo amarillo */
   padding: 15px;
   margin-top: 30px;
   font-weight: bold;

@@ -1,3 +1,6 @@
+/* ============================= */
+/* ESTILOS GENERALES */
+/* ============================= */
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
@@ -5,6 +8,9 @@ body {
     color: #f5f0e1;
 }
 
+/* ============================= */
+/* CABECERA */
+/* ============================= */
 .imss-header {
     background-color: #1d1d1b;
     padding: 10px 20px;
@@ -16,6 +22,9 @@ body {
     height: auto;
 }
 
+/* ============================= */
+/* BARRA DE NAVEGACIÓN */
+/* ============================= */
 .main-nav-imss {
     background-color: #2c2c29;
     padding: 10px 20px;
@@ -43,8 +52,6 @@ body {
     padding: 8px 14px;
     border-radius: 6px;
     display: inline-block;
-
-    /* Transiciones suaves */
     transition: 
         background-color 0.3s ease,
         color 0.3s ease,
@@ -59,88 +66,212 @@ body {
     opacity: 0.9;
 }
 
-/* Distribución general: mapa a la izquierda, panel a la derecha */
+/* ============================= */
+/* CONTENEDOR PRINCIPAL */
+/* ============================= */
 .contenedor-principal {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 20px;
-  background-color: #f5f5f5; /* fondo neutro */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+    background-color: #f5f5f5;
 }
 
+/* ============================= */
+/* MAPA PRINCIPAL */
+/* ============================= */
 .mapa-o-contenido {
-  flex: 1;
-  margin-right: 20px;
+    flex: 1;
 }
 
-/* Panel lateral derecho */
+/* Tarjeta del mapa */
+.map-card {
+    background-color: #2a2a28;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 0 18px rgba(0,0,0,0.5);
+}
+
+/* Header del mapa */
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background: linear-gradient(90deg, #2f8670, #1d1d1b);
+    color: #f5f0e1;
+    font-weight: 600;
+}
+
+.map-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Badge CIE */
+.map-badge {
+    background-color: #1d1d1b;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    border: 1px solid #3ba68a;
+    color: #b4e1d3;
+}
+
+/* Iframe del mapa */
+.map-card iframe {
+    width: 100%;
+    height: 650px;
+    border: none;
+}
+
+/* ============================= */
+/* PANEL DERECHO */
+/* ============================= */
 .panel-derecho {
-  width: 320px;
-  position: sticky;
-  top: 20px;
+    width: 320px;
+    position: sticky;
+    top: 20px;
 }
 
-/* Tarjeta estilo IMSS-BIENESTAR */
+/* Tarjeta CIE */
 .tarjeta-cie {
-  background-color: #2f2f2f; /* oscuro, como tu imagen */
-  color: #ffffff;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  font-family: 'Segoe UI', sans-serif;
+    background-color: #2f2f2f;
+    color: #ffffff;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
+/* Títulos */
 .tarjeta-cie h4 {
-  margin: 0 0 10px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #ffe0b2; /* color arena similar al de IMSS-BIENESTAR */
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffe0b2;
 }
 
 .subtitulo {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #ddd;
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #ddd;
 }
 
+/* ============================= */
+/* INPUT CIE */
+/* ============================= */
 .entrada-cie {
-  width: 100%;
-  padding: 8px;
-  border-radius: 10px;
-  border: none;
-  font-size: 14px;
-  outline: none;
-  color: #333;
-  background-color: #fefefe;
-  margin-bottom: 15px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    outline: none;
+    color: #333;
+    background-color: #fefefe;
+    margin-bottom: 15px;
 }
 
-/* Botones */
+/* ============================= */
+/* BOTONES */
+/* ============================= */
 .acciones {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 .btn-generar,
 .btn-limpiar {
-  background-color: #3ba68a; /* verde IMSS */
-  border: none;
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-size: 16px;
-  cursor: pointer;
-  color: white;
-  transition: background-color 0.3s ease;
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 15px;
+    cursor: pointer;
+    color: white;
+    transition: 
+        background-color 0.3s ease,
+        transform 0.2s ease;
+}
+
+.btn-generar {
+    background-color: #3ba68a;
 }
 
 .btn-generar:hover {
-  background-color: #2f8670;
+    background-color: #2f8670;
+    transform: scale(1.05);
 }
 
 .btn-limpiar {
-  background-color: #a63b3b;
+    background-color: #a63b3b;
 }
 
 .btn-limpiar:hover {
-  background-color: #7c2a2a;
+    background-color: #7c2a2a;
+    transform: scale(1.05);
+}
+
+/* ============================= */
+/* AYUDA CIE */
+/* ============================= */
+.cie-ayuda {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #ccc;
+}
+
+.cie-ayuda ul {
+    padding-left: 18px;
+    margin: 5px 0 0;
+}
+
+.cie-ayuda li {
+    margin-bottom: 4px;
+}
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+footer {
+    background-color: #006657;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 14px;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+@media (max-width: 992px) {
+    .contenedor-principal {
+        flex-direction: column;
+    }
+
+    .panel-derecho {
+        width: 100%;
+        position: relative;
+    }
+
+    .map-card iframe {
+        height: 500px;
+    }
+}
+
+@media (max-width: 576px) {
+    .map-header h3 {
+        font-size: 16px;
+    }
+
+    .map-badge {
+        font-size: 12px;
+    }
+
+    .btn-generar,
+    .btn-limpiar {
+        font-size: 14px;
+    }
 }

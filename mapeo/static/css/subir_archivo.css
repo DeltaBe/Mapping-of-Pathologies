@@ -1,3 +1,4 @@
+/* Contenedor principal para la tarea */
 .task-container {
   max-width: 600px;
   margin: 50px auto;
@@ -7,10 +8,13 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
+/* Estilo para el campo de entrada de archivos */
 input[type="file"] {
   margin-bottom: 15px;
+  width: 100%;
 }
 
+/* Botón */
 button {
   background-color: #2b7a78;
   color: white;
@@ -18,20 +22,37 @@ button {
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%; /* Hace que el botón ocupe todo el ancho */
 }
 
+/* Mensajes de éxito y error */
 .mensaje {
   margin-top: 20px;
   padding: 10px;
   border-radius: 6px;
+  font-size: 1em;
 }
 
+/* Estilo para el mensaje de éxito */
 .mensaje-exito {
   background-color: #d4edda;
   color: #155724;
 }
 
+/* Estilo para el mensaje de error */
 .mensaje-error {
   background-color: #f8d7da;
   color: #721c24;
+}
+
+/* Responsividad: Ajustes para dispositivos pequeños */
+@media (max-width: 767px) {
+  .task-container {
+    padding: 20px;
+  }
+
+  button {
+    padding: 12px 20px;
+    font-size: 1.2em;
+  }
 }

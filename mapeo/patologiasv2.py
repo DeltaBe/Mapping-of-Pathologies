@@ -13,7 +13,7 @@ DB_CONFIG = {
     "database": "ONCOLOGICA V6",
     "user": "postgres",
     "password": "1234",
-    "port": "5433"
+    "port": "5432"
 }
 
 def limpiar_nombre(nombre):
@@ -68,14 +68,9 @@ def cargar_datos_geograficos(ruta_geojson, columna_nombre='mun_name'):
 
 def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
     # Definir rutas de los GeoJSON
-<<<<<<< HEAD
-    ruta_geojson_chiapas = 'C:/Users/mende/OneDrive/Documentos/ING. SOFTWARE/SEGUNDO AÑO/Estancia I/Estancia2/Proyecto/Mapping-of-Pathologies/mapeo/static/Chiapas_geo.geojson'
-    ruta_geojson_oaxaca = 'C:/Users/mende/OneDrive/Documentos/ING. SOFTWARE/SEGUNDO AÑO/Estancia I/Estancia2/Proyecto/Mapping-of-Pathologies/mapeo/static/datos_geograficos_Oaxaca.geojson'
-=======
     ruta_geojson_chiapas = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\Chiapas_geo.geojson'
     ruta_geojson_oaxaca = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\datos_geograficos_Oaxaca.geojson'
 
->>>>>>> 378a23d1291d95908e3894c1825ed0374a1f15b8
     # Obtener datos por CIE
     df = obtener_datos_por_cie(cie_id)
     
@@ -92,7 +87,7 @@ def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
     combinado = gdf.merge(df, how='left', left_on='mun_name', right_on='municipio')
 
     # Crear el mapa
-    mapa = fm.Map(location=[17.0, -95.0], zoom_start=6, tiles='cartodbpositron')
+    mapa = fm.Map(location=[17.0, -95.0], zoom_start=6, tiles='cartodbpositron' , width= '100%', height='100%')
 
     # Verificar si hay casos y añadir la capa de colores
     if combinado['total_casos'].notna().any():
@@ -127,8 +122,4 @@ def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
                 ).add_to(mapa)
 
     # Guardar el mapa en el archivo de salida
-<<<<<<< HEAD
     mapa.save(ruta_salida)
-=======
-    mapa.save(ruta_salida)
->>>>>>> 378a23d1291d95908e3894c1825ed0374a1f15b8

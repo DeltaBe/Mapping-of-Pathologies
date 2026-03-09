@@ -15,6 +15,7 @@ Este proyecto es un sistema de visualización de datos epidemiológicos basado e
 * **Análisis de Datos:** [Pandas](https://pandas.pydata.org/)
 * **Mapas:** [Folium](https://python-visualization.github.io/folium/)
 * **Frontend:** HTML5, CSS3 (Flexbox/Grid), Django Templates.
+* **Postgressql** Version 16
 
 ## 📦 Instalación y Configuración
 

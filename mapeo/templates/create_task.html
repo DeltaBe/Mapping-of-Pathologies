@@ -2,18 +2,47 @@
 {% load static %}
 
 {% block content %}
-<div class="tabla-container">
-  <h1>Casos por CIE10: {{ cie_id }}</h1>
+<link rel="stylesheet" href="{% static 'css/tabla.css' %}">
 
-  <form method="POST" class="formulario-cie">
+<div class="tabla-container">
+
+  <!-- TÍTULO -->
+  <h1>
+    Casos por CIE10
+    {% if cie_id %}
+      : {{ cie_id }}
+    {% endif %}
+  </h1>
+
+  <!-- FORMULARIO -->
+  <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn-filtrar">Buscar</button>
-    <a href="{% url 'create_task' %}" class="btn-limpiar">Limpiar</a>
+
+    <!-- Si usas Django Form -->
+    {% if form %}
+      {{ form.cie_id }}
+    {% else %}
+      <input
+        type="text"
+        name="cie_id"
+        placeholder="Ej. C50"
+        value="{{ cie_id|default:'' }}"
+        maxlength="4"
+        autocomplete="off">
+    {% endif %}
+    <button type="submit" class="btn-outline">
+  Buscar
+</button>
+
+<a href="{% url 'create_task' %}" class="btn-outline">
+   Limpiar
+</a>
+
   </form>
 
+  <!-- TABLA -->
   {% if datos %}
-    <table class="tabla-datos">
+    <table>
       <thead>
         <tr>
           <th>Estado</th>
@@ -25,18 +54,22 @@
       </thead>
       <tbody>
         {% for fila in datos %}
-          <tr>
-            <td>{{ fila.estado }}</td>
-            <td>{{ fila.municipio }}</td>
-            <td>{{ fila.sexo }}</td>
-            <td>{{ fila.id_cie10 }}</td>
-            <td>{{ fila.total_casos }}</td>
-          </tr>
+        <tr>
+          <td>{{ fila.estado }}</td>
+          <td>{{ fila.municipio }}</td>
+          <td>{{ fila.sexo }}</td>
+          <td>{{ fila.id_cie10 }}</td>
+          <td>{{ fila.total_casos }}</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
   {% else %}
-    <p>No se encontraron datos para la clave CIE proporcionada.</p>
+    <div class="sin-resultados">
+      No se encontraron datos para la clave CIE proporcionada.
+    </div>
   {% endif %}
+
 </div>
+
 {% endblock %}

@@ -4,27 +4,35 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
-<div class="inicio-container">
-  <div class="bienvenida">
-    <h1>Bienvenido al Sistema de Visualización de Patologías Oncológicas</h1>
-    <p>
-      Este sitio permite consultar información geográfica sobre la incidencia de enfermedades oncológicas, 
-      utilizando claves CIE-10. Puedes visualizar mapas interactivos que muestran los casos registrados 
-      por municipio y estado en el sur de México, específicamente en Chiapas y Oaxaca.
-    </p>
-    <p>
-      Utiliza el panel de búsqueda para ingresar una clave CIE y generar un mapa correspondiente. 
-      También puedes acceder a la sección de ayuda para entender cómo funcionan las claves CIE.
-    </p>
-  </div>
+<div class="container my-5">
+  <div class="row">
+    <!-- Bienvenida -->
+    <div class="col-12 col-md-6 mb-4">
+      <div class="bienvenida">
+        <h1 class="display-4">Bienvenido al Sistema de Visualización de Patologías Oncológicas</h1>
+        <p class="lead">
+          Este sitio permite consultar información geográfica sobre la incidencia de enfermedades oncológicas, 
+          utilizando claves CIE-10. Puedes visualizar mapas interactivos que muestran los casos registrados 
+          por municipio y estado en el sur de México, específicamente en Chiapas y Oaxaca.
+        </p>
+        <p>
+          Utiliza el panel de búsqueda para ingresar una clave CIE y generar un mapa correspondiente. 
+          También puedes acceder a la sección de ayuda para entender cómo funcionan las claves CIE.
+        </p>
+      </div>
+    </div>
 
-  <div class="info-extra">
-    <h2>¿Qué puedes hacer aquí?</h2>
-    <ul>
-      <li>🔍 Buscar enfermedades por su clave CIE.</li>
-      <li>🗺️ Ver mapas con distribución de casos.</li>
-      <li>📚 Obtener información educativa sobre patologías.</li>
-    </ul>
+    <!-- Información adicional -->
+    <div class="col-12 col-md-6">
+      <div class="info-extra">
+        <h2 class="h4">¿Qué puedes hacer aquí?</h2>
+        <ul class="list-unstyled">
+          <li>🔍 <strong>Buscar enfermedades</strong> por su clave CIE.</li>
+          <li>🗺️ <strong>Ver mapas</strong> con distribución de casos.</li>
+          <li>📚 <strong>Obtener información educativa</strong> sobre patologías.</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

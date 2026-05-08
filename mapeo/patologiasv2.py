@@ -87,7 +87,7 @@ def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
     combinado = gdf.merge(df, how='left', left_on='mun_name', right_on='municipio')
 
     # Crear el mapa
-    mapa = fm.Map(location=[17.0, -95.0], zoom_start=6, tiles='cartodbpositron')
+    mapa = fm.Map(location=[17.0, -95.0], zoom_start=6, tiles='cartodbpositron' , width= '100%', height='100%')
 
     # Verificar si hay casos y añadir la capa de colores
     if combinado['total_casos'].notna().any():

@@ -2,19 +2,23 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'task.css' %}">
+<link rel="stylesheet" href="{% static 'css/task.css' %}">
 
 <div class="task-container">
-  <h1>Cargar datos y generar mapa</h1>
 
-  <form method="POST" enctype="multipart/form-data">
+    <h1>Centro de Procesamiento de Datos</h1>
+
+    <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Cargar y Generar</button>
-  </form>
 
-  {% if mensaje %}
-    <p class="mensaje">{{ mensaje }}</p>
-  {% endif %}
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+    {% endfor %}
+
+    <button type="submit">Cargar Datos</button>
+</form>
 </div>
 {% endblock %}

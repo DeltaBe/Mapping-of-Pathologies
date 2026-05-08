@@ -1,0 +1,129 @@
+/* Contenedor Principal: Maneja la distribución de las dos secciones */
+.contenedor-principal {
+    display: flex;
+    flex-wrap: wrap; /* Permite que el panel derecho baje en pantallas pequeñas */
+    gap: 20px;
+    padding: 20px;
+    align-items: flex-start;
+    background-color: #f8f9fa; /* Un fondo sutil para resaltar las tarjetas */
+}
+
+.map-header h3 {
+    color: #00695c; /* Verde esmeralda oscuro */
+}
+
+.map-badge {
+    background-color: #e0f2f1;
+    color: #004d40;
+}
+
+.tarjeta-cie h4 {
+    color: #212121; /* Casi negro para máximo contraste */
+}
+
+/* Sección del Mapa (75% de ancho en escritorio) */
+.mapa-o-contenido {
+    flex: 3;
+    min-width: 320px; /* Evita que el mapa se comprima demasiado */
+}
+
+/* Tarjeta del Mapa */
+.map-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.map-header {
+    padding: 15px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Estilo para el Iframe del Mapa */
+.map-card iframe {
+    width: 100%;
+    height: 650px; /* Altura por defecto en PC */
+    border: none;
+    display: block;
+}
+
+/* Panel Derecho (25% de ancho en escritorio) */
+.panel-derecho {
+    flex: 1;
+    min-width: 280px;
+}
+
+/* Tarjeta de Filtros CIE */
+.tarjeta-cie {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 20px; /* Se queda fijo mientras haces scroll */
+}
+
+/* Estilos de Formulario */
+.entrada-cie {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.acciones button, .btn-rojo {
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+
+.acciones button {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-rojo {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* --- MEDIA QUERIES PARA RESPONSIVIDAD (CELULARES) --- */
+@media (max-width: 992px) {
+    .contenedor-principal {
+        flex-direction: column; /* Apila el mapa arriba y el filtro abajo */
+    }
+
+    .mapa-o-contenido, .panel-derecho {
+        width: 100%; /* Ocupan todo el ancho disponible */
+    }
+
+    .map-card iframe {
+        height: 450px; /* Reducimos la altura en celulares para mejor navegación */
+    }
+
+    .tarjeta-cie {
+        position: static; /* Quita el modo fijo en móviles */
+    }
+}
+
+@media (max-width: 480px) {
+    .map-card iframe {
+        height: 350px; /* Altura mínima para pantallas muy pequeñas */
+    }
+}

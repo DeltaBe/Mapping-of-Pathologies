@@ -1,3 +1,5 @@
+import time
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
@@ -5,6 +7,7 @@ from django.conf import settings
 import os
 
 from mapeo.map_generado import generar_mapa_calor
+from mapeo.patologiasv2 import generar_mapa_patologias
 
 # 1. IMPORTACIONES CORREGIDAS (Solo modelos que existen)
 from .models import IncidenciaOncologica, Enfermedad
@@ -23,35 +26,35 @@ def index(request):
         'title': title,
         'total_casos': total_casos
     })
-
 def about(request):
-    """
-    Vista para visualizar el mapa generado.
-    """
-    cie_id = "C50"  # Valor por defecto (Cáncer de mama)
+    cie_id = request.POST.get("cie_id", "C50").strip() if request.method == "POST" else "C50"
     
-    if request.method == "POST":
-        cie_id = request.POST.get("cie_id", "C50")
-    
-    # El archivo mapa.html debe existir en tus estáticos o ser generado
+    ruta_geojson = os.path.join(settings.BASE_DIR, 'mapeo', 'static', 'Chiapas_geo.geojson')
     nombre_archivo = "mapa.html"
-    
+    ruta_mapa = os.path.join(settings.BASE_DIR, 'mapeo', 'static', nombre_archivo)
+
+    try:
+        # Generar el nuevo objeto mapa
+        mapa_obj = generar_mapa_patologias(ruta_geojson, cie_id)
+        
+        if mapa_obj:
+            # ELIMINAR EL ANTERIOR para evitar bloqueos de Windows
+            if os.path.exists(ruta_mapa):
+                try:
+                    os.remove(ruta_mapa)
+                except:
+                    pass # Si está bloqueado, Folium intentará sobrescribirlo de todos modos
+            
+            mapa_obj.save(ruta_mapa)
+    except Exception as e:
+        return HttpResponse(f"Error crítico: {e}")
+
     return render(request, 'about.html', {
         'mapa_file': nombre_archivo,
         'cie_id': cie_id,
+        'timestamp': time.time() # Para forzar la recarga del iframe
     })
-
-# def proyects(request):
-#     """
-#     Refactorizado: Muestra un resumen por estados en lugar de 'proyectos'.
-#     """
-#     resumen_estados = (
-#         IncidenciaOncologica.objects.values('estado')
-#         .distinct()
-#         .order_by('estado')
-#     )
-#     return render(request, 'proyects.html', {'proyectos': resumen_estados})
-
+    
 def tasks(request):
     """
     Vista informativa sobre las claves CIE-10 y manual de uso.

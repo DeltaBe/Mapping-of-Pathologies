@@ -1,58 +1,65 @@
 from django.db import models
 
-# Create your models here.
-#creo la tabla proyecto
-# y le pongo un campo name que es un charfield con maximo 100 caracteres y unico
-class proyecto(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-# este metodo me permite devolver el nombre del proyecto cuando se imprima el objeto
-    def __str__(self):
-        return self.name
-
-class Task(models.Model):
-    title = models.CharField(max_length=100)
-    descripcion = models.TextField()
-    proyect = models.ForeignKey(proyecto, on_delete=models.CASCADE, related_name='tasks')
-    done = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.title + '-' + self.proyect.name
-    
- 
- 
-    
 class Enfermedad(models.Model):
-    id_cie10 = models.CharField(max_length=10, primary_key=True)
-    diagnostico_cie10 = models.CharField(max_length=255)
+    """
+    Catálogo maestro de enfermedades basado en la codificación CIE-10.
+    """
+    id_cie10 = models.CharField(
+        max_length=10, 
+        primary_key=True, 
+        verbose_name="Código CIE-10"
+    )
+    diagnostico_cie10 = models.CharField(
+        max_length=255, 
+        verbose_name="Descripción del Diagnóstico"
+    )
 
     class Meta:
         db_table = 'enfermedades'
         verbose_name = 'Enfermedad'
-        verbose_name_plural = 'Enfermedades'
+        verbose_name_plural = 'Catálogo de Enfermedades'
+        ordering = ['id_cie10']
 
     def __str__(self):
         return f"{self.id_cie10} - {self.diagnostico_cie10}"
 
 
 class IncidenciaOncologica(models.Model):
+    """
+    Registro detallado de incidencias oncológicas.
+    """
     idconsulta = models.BigIntegerField(primary_key=True)
-    fecha = models.DateField(null=True, blank=True)
-    sexo = models.CharField(max_length=10, null=True, blank=True)
-    diagnostico = models.CharField(max_length=255)
-    municipio = models.CharField(max_length=255, null=True, blank=True)
-    estado = models.CharField(max_length=255, null=True, blank=True)
-    expediente = models.CharField(max_length=50, null=True, blank=True)
+    fecha = models.DateField(null=True, blank=True, db_index=True)
+    
+    # Datos demográficos
+    sexo = models.CharField(max_length=20, null=True, blank=True)
     paciente = models.CharField(max_length=255, null=True, blank=True)
-    iddiagnostico = models.CharField(max_length=5, null=True, blank=True)
-    primera_vez = models.IntegerField(null=True, blank=True)
-    valor_clasificacion = models.CharField(max_length=60, null=True, blank=True)
+    expediente = models.CharField(max_length=50, null=True, blank=True)
+    
+    # Datos geográficos (Indexados para optimizar mapas)
+    municipio = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    estado = models.CharField(max_length=255, null=True, blank=True, db_index=True)
+    
+    # Relación con el catálogo de enfermedades
+    # Usamos CharField para id_cie10 si los datos del CSV pueden no estar en el catálogo aún,
+    # o ForeignKey si queremos integridad total. Aquí lo mantenemos flexible:
+    id_cie10 = models.CharField(max_length=10, db_index=True)
     diagnostico_cie10 = models.CharField(max_length=255, null=True, blank=True)
-    id_cie10 = models.CharField(max_length=10, null=True, blank=True)
+    
+    # Otros datos técnicos
+    iddiagnostico = models.CharField(max_length=10, null=True, blank=True)
+    primera_vez = models.IntegerField(null=True, blank=True)
+    valor_clasificacion = models.CharField(max_length=100, null=True, blank=True)
+    diagnostico_clinico = models.TextField(null=True, blank=True) # Renombrado para mayor claridad
 
     class Meta:
         db_table = 'incidencia_oncologica'
-        verbose_name = 'Incidencia Oncológica'
-        verbose_name_plural = 'Incidencias Oncológicas'
+        verbose_name = 'Incidencia Oncográfica'
+        verbose_name_plural = 'Incidencias Oncográficas'
+        # Indexación compuesta para búsquedas frecuentes de mapas
+        indexes = [
+            models.Index(fields=['id_cie10', 'municipio']),
+        ]
 
     def __str__(self):
-        return f"{self.idconsulta} - {self.diagnostico}"
+        return f"Consulta {self.idconsulta} - {self.id_cie10}"

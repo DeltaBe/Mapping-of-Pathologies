@@ -1,119 +1,57 @@
-/* ===== Fondo ===== */
-body{
-    background-color:#1c1c1c;
-    color:#e6e6e6;
-    font-family: 'Segoe UI', sans-serif;
+/* static/css/task.css */
+
+:root {
+    --primary-accent: #004d43; /* Un verde más oscuro para contraste */
+    --secondary-accent: #d4af37; /* Dorado sutil para resaltar */
+    --bg-light: #f8f9fa;
+    --text-dark: #2c3e50;
 }
 
-/* ===== Contenedor ===== */
-.task-container{
-
-    max-width:900px;
-    margin:60px auto;
-    padding:45px;
-
-    background:#1c1c1c;
-
-    border-radius:10px;
-
-    /* borde elegante */
-    border-left:6px solid #19b39b;
-
-    box-shadow:0 10px 30px rgba(0,0,0,.6);
+.info-container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-top: 20px;
 }
 
-/* ===== TITULO ===== */
-.task-container h1{
-    color:#19b39b;
-    font-size:2.2rem;
-    margin-bottom:35px;
+.section-title {
+    color: var(--primary-accent);
+    border-left: 5px solid var(--secondary-accent);
+    padding-left: 15px;
+    font-weight: 700;
+    margin-bottom: 25px;
 }
 
-/* ===== FORM ===== */
-form{
-    display:flex;
-    flex-direction:column;
-    gap:24px;
+.manual-card {
+    transition: transform 0.3s ease;
+    border: none;
+    background: var(--bg-light);
 }
 
-/* Grupo label + input */
-.form-group{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+.manual-card:hover {
+    transform: translateY(-5px);
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* LABEL (Ej: CIE-10) */
-label{
-    font-weight:600;
-    color:#b9c4cc;
+.cie-badge {
+    background-color: var(--secondary-accent);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
 }
 
-/* INPUTS */
-input, select, textarea{
-
-    padding:15px;
-
-    border-radius:8px;
-    border:1.8px solid #1f2a33;
-
-    background:#0e1114;
-    color:#ffffff;
-
-    font-size:1rem;
-
-    transition:.25s;
-}
-
-/* efecto profesional */
-input:focus,
-select:focus,
-textarea:focus{
-
-    outline:none;
-    border-color:#19b39b;
-
-    box-shadow:0 0 0 3px rgba(25,179,155,.15);
-}
-
-/* ===== BOTÓN GRANDE ===== */
-
-button{
-
-    margin-top:10px;
-    padding:18px;
-
-    font-size:1.2rem;
-    font-weight:bold;
-
-    background:#0f6b5a;
-    color:white;
-
-    border:none;
-    border-radius:8px;
-
-    cursor:pointer;
-
-    transition:.3s;
-}
-
-/* Hover elegante */
-button:hover{
-    background:#19b39b;
-}
-
-/* Click */
-button:active{
-    transform:scale(.98);
-}
-
-/* ===== RESPONSIVE ===== */
-
-@media(max-width:768px){
-
-    .task-container{
-        margin:20px;
-        padding:30px;
-    }
-
+.step-number {
+    background: var(--primary-accent);
+    color: white;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 10px;
+    font-weight: bold;
 }

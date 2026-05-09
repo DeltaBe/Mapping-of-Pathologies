@@ -1,125 +1,89 @@
-import psycopg2
 import pandas as pd
 import folium as fm
 import geopandas as gpd
 import branca.colormap as cm
 from shapely.geometry import shape
-import fiona as fn
+import fiona
 import unidecode
-import ast
-
-DB_CONFIG = {
-    "host": "localhost",
-    "database": "ONCOLOGICA V6",
-    "user": "postgres",
-    "password": "1234",
-    "port": "5432"
-}
+from io import BytesIO
+from .models import IncidenciaOncologica  # Usamos el modelo de Django
 
 def limpiar_nombre(nombre):
-    try:
-        return unidecode.unidecode(ast.literal_eval(nombre)[0]).strip().upper()
-    except Exception:
-        return unidecode.unidecode(str(nombre)).strip().upper()
+    """Limpia acentos y estandariza nombres para el cruce de datos."""
+    if not nombre:
+        return ""
+    # Eliminamos acentos y pasamos a mayúsculas
+    texto = unidecode.unidecode(str(nombre))
+    return texto.strip().upper()
 
-def obtener_datos_por_cie(cie_id):
-    try:
-        conn = psycopg2.connect(**DB_CONFIG)
-        conn.set_client_encoding('UTF8')
-        cursor = conn.cursor()
-
-        query = f"""
-        SELECT estado, municipio, COUNT(*) AS total_casos
-        FROM incidencia_oncologica
-        WHERE id_cie10 LIKE '{cie_id}%'
-        GROUP BY estado, municipio
-        ORDER BY estado, municipio;
-        """
-
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        cols = [desc[0] for desc in cursor.description]
-        df = pd.DataFrame(rows, columns=cols)
-
-        cursor.close()
-        conn.close()
-
-        df['municipio'] = df['municipio'].astype(str).str.upper()
-        df['municipio'] = df['municipio'].apply(limpiar_nombre)
-        return df
-
-    except Exception as e:
-        print("❌ Error al obtener datos:", e)
-        return pd.DataFrame()
-
-def cargar_datos_geograficos(ruta_geojson, columna_nombre='mun_name'):
-    features = []
-    with fn.open(ruta_geojson, encoding='utf-8') as src:
-        for feat in src:
-            props = feat['properties']
-            props['geometry'] = shape(feat['geometry'])
-            features.append(props)
-    gdf = gpd.GeoDataFrame(features)
-    gdf.set_crs(epsg=4326, inplace=True)
-    gdf[columna_nombre] = gdf[columna_nombre].astype(str).str.upper()
-    gdf[columna_nombre] = gdf[columna_nombre].apply(limpiar_nombre)
-    gdf = gdf.rename(columns={columna_nombre: 'mun_name'})
-    return gdf
-
-def generar_mapa_por_cie(cie_id, ruta_salida, municipio=None):
-    # Definir rutas de los GeoJSON
-    ruta_geojson_chiapas = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\Chiapas_geo.geojson'
-    ruta_geojson_oaxaca = 'C:\\Users\\elver\\Documents\\ESTANCIA 1\\DATA\\datos_geograficos_Oaxaca.geojson'
-
-    # Obtener datos por CIE
-    df = obtener_datos_por_cie(cie_id)
+def obtener_datos_oncologicos(cie_id):
+    """
+    Obtiene estadísticas usando el ORM de Django. 
+    Más seguro y eficiente que usar psycopg2 directamente.
+    """
+    queryset = IncidenciaOncologica.objects.filter(
+        id_cie10__startswith=cie_id.upper()
+    ).values('estado', 'municipio')
     
-    # Filtrar por municipio si es proporcionado
-    if municipio:
-        df = df[df['municipio'] == municipio.upper()]
+    df = pd.DataFrame(list(queryset))
+    if not df.empty:
+        # Agrupar y contar casos
+        df = df.groupby(['estado', 'municipio']).size().reset_index(name='total_casos')
+        df['municipio_limpio'] = df['municipio'].apply(limpiar_nombre)
+    return df
 
-    # Cargar los datos geográficos de los archivos GeoJSON
-    gdf_chiapas = cargar_datos_geograficos(ruta_geojson_chiapas)
-    gdf_oaxaca = cargar_datos_geograficos(ruta_geojson_oaxaca)
-    gdf = pd.concat([gdf_chiapas, gdf_oaxaca], ignore_index=True)
+def generar_mapa_patologias(archivo_geojson, cie_id):
+    """Genera el mapa interactivo de patologías."""
+    
+    # 1. Obtener datos de la BD
+    df_casos = obtener_datos_oncologicos(cie_id)
+    
+    # 2. Cargar GeoJSON desde memoria
+    geojson_bytes = archivo_geojson.read()
+    with fiona.BytesCollection(geojson_bytes) as src:
+        gdf = gpd.GeoDataFrame.from_features(src, crs="EPSG:4326")
+    
+    # Estandarizar nombres en el mapa para el cruce
+    gdf['mun_name_limpio'] = gdf['mun_name'].apply(limpiar_nombre)
 
-    # Realizar la unión entre los datos geográficos y los datos de la base de datos
-    combinado = gdf.merge(df, how='left', left_on='mun_name', right_on='municipio')
+    # 3. Unir datos (Merge)
+    combinado = gdf.merge(
+        df_casos, 
+        how='left', 
+        left_on='mun_name_limpio', 
+        right_on='municipio_limpio'
+    )
 
-    # Crear el mapa
-    mapa = fm.Map(location=[17.0, -95.0], zoom_start=6, tiles='cartodbpositron' , width= '100%', height='100%')
+    # 4. Crear Mapa base
+    mapa = fm.Map(
+        location=[16.5, -94.5], # Centrado aproximado en la zona de interés
+        zoom_start=7, 
+        tiles='cartodbpositron'
+    )
 
-    # Verificar si hay casos y añadir la capa de colores
-    if combinado['total_casos'].notna().any():
-        min_casos = combinado['total_casos'].min()
-        max_casos = combinado['total_casos'].max()
-        punto_bajo = min_casos + (max_casos - min_casos) * 0.33
-        punto_medio = min_casos + (max_casos - min_casos) * 0.66
+    # 5. Capa de Color y Marcadores
+    if not combinado['total_casos'].dropna().empty:
+        v_min = combinado['total_casos'].min()
+        v_max = combinado['total_casos'].max()
+        
+        colormap = cm.LinearColormap(
+            colors=['blue', 'yellow', 'red'],
+            vmin=v_min,
+            vmax=v_max,
+            caption=f'Casos detectados de {cie_id}'
+        ).add_to(mapa)
 
-        # Crear el colormap para visualizar los casos
-        colormap = cm.StepColormap(
-            ['blue', 'yellow', 'red'],
-            index=[min_casos, punto_bajo, punto_medio, max_casos],
-            vmin=min_casos,
-            vmax=max_casos,
-            caption='Total de casos de cáncer de mama'
-        )
-        colormap.add_to(mapa)
-
-        # Añadir los marcadores al mapa
         for _, row in combinado.iterrows():
-            if pd.notnull(row.get('total_casos')):
+            if pd.notnull(row.get('total_casos')) and row['geometry']:
                 centroide = row['geometry'].centroid
-                valor = row['total_casos']
                 fm.CircleMarker(
                     location=[centroide.y, centroide.x],
-                    radius=max(valor ** 0.5, 4),
+                    radius=max((row['total_casos'] ** 0.5) * 3, 5),
+                    color=colormap(row['total_casos']),
                     fill=True,
-                    fill_color=colormap(valor),
-                    fill_opacity=0.2,
-                    popup=f"{row['mun_name']}<br>Casos: {int(valor)}",
+                    fill_opacity=0.6,
+                    popup=f"<b>{row['mun_name']}</b>: {int(row['total_casos'])} casos",
                     tooltip=row['mun_name']
                 ).add_to(mapa)
 
-    # Guardar el mapa en el archivo de salida
-    mapa.save(ruta_salida)
+    return mapa

@@ -1,119 +1,78 @@
-from django.shortcuts import render, redirect
-
-# Create your views here.
-#para poder enviar alggo al cliente por medio de una respuesta http
-# el jsonresponse nos permite enviar un objeto json y el HttpResponse nos permite enviar una cadena de texto
-from django.http import HttpResponse , JsonResponse
-# Register your models here.
-
-#importamos los modelos que hemos creado para poder hacer consultas a la base de datos
-from .models import proyecto, Task
-
-from django.shortcuts import get_object_or_404
-#funcion que nos permite devolver una respuesta http
-
-from .forms import CreateNewTask
-from .forms import CreateNewProyecto
-
-from .forms import CIEForm
-from .patologiasv2 import generar_mapa_por_cie  # Asegúrate de tener esta función
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
-import os
 from django.conf import settings
-from .tabla import obtener_datos_por_cie
-from .forms import CIE10Form
-
 import os
-import uuid
 
-from .forms import ArchivoOncologiaForm
+from mapeo.map_generado import generar_mapa_calor
+
+# 1. IMPORTACIONES CORREGIDAS (Solo modelos que existen)
+from .models import IncidenciaOncologica, Enfermedad
+from .forms import CIE10Form, ArchivoOncologiaForm
+from .tabla import obtener_datos_por_cie
 from .procesar_archivo import procesar_y_guardar_csv
 from .generar_mapa import generar_mapa_desde_bd_y_geojson
-
-
-
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 def index(request):
-    title = "Mi primer proyecto con Django"
-    return render(request,'index.html', {'title': title})
-
-
+    title = "Sistema de Mapeo Oncológico"
+    # Contamos casos reales para mostrar en el index si lo deseas
+    total_casos = IncidenciaOncologica.objects.count()
+    return render(request, 'index.html', {
+        'title': title,
+        'total_casos': total_casos
+    })
 
 def about(request):
-    cie_id = "C50"  # Valor por defecto
-    municipio = None  # Sin municipio por defecto
+    """
+    Vista para visualizar el mapa generado.
+    """
+    cie_id = "C50"  # Valor por defecto (Cáncer de mama)
     
-    # Verificar si el formulario fue enviado con POST
     if request.method == "POST":
         cie_id = request.POST.get("cie_id", "C50")
-        municipio = request.POST.get("municipio", None)  # Obtener el municipio desde el formulario
     
-    nombre_archivo = f"mapa.html"
-    ruta_completa = os.path.join(settings.BASE_DIR, 'mapeo', 'static', nombre_archivo)
-    
-    # Generar el nuevo mapa con el ID CIE y municipio si se ha seleccionado
-    if municipio:
-        generar_mapa_por_cie(cie_id, municipio=municipio, ruta_salida=ruta_completa)
-    else:
-        generar_mapa_por_cie(cie_id, ruta_salida=ruta_completa)
+    # El archivo mapa.html debe existir en tus estáticos o ser generado
+    nombre_archivo = "mapa.html"
     
     return render(request, 'about.html', {
         'mapa_file': nombre_archivo,
         'cie_id': cie_id,
-        'municipio': municipio  # Pasar el municipio a la plantilla
     })
-#funcion que nos permite devolver un parametro
-def hello(request,username):
-    print(username)
-    #devolver una respuesta http
-    #en este caso una cadena de texto
-    return HttpResponse("<h1>Hello World %s</h1>" % username)
 
-
-
-def proyec(request):
-    return HttpResponse("proyec")
-
-def task(request):
-    return HttpResponse("task")
-
-
-
-
-def proyects(request):
-    #obtenemos todos los proyectos de la base de datos
-    #y los convertimos a un objeto json para que se pueda enviar al cliente
-    #usamos el metodo values() para obtener un diccionario con los campos de la tabla
-    proyectos = proyecto.objects.all()
-    # return JsonResponse(proyectos , safe=False )
-    
-    
-    
-    return render(request,'proyects.html', {'proyectos': proyectos})
+# def proyects(request):
+#     """
+#     Refactorizado: Muestra un resumen por estados en lugar de 'proyectos'.
+#     """
+#     resumen_estados = (
+#         IncidenciaOncologica.objects.values('estado')
+#         .distinct()
+#         .order_by('estado')
+#     )
+#     return render(request, 'proyects.html', {'proyectos': resumen_estados})
 
 def tasks(request):
-    #obtenemos todas las tareas del proyecto con el id que nos han pasado
-    #usamos el metodo get() para obtener un objeto de la base de datos
-    task=Task.objects.all()
-    
-    # usamos get_object_or_404 para obtener el objeto o devolver un error 404 si no existe
-    # get_object_or_404 es una funcion que nos permite obtener un objeto de la base de datos o devolver un error 404 si no existe
-    # task = get_object_or_404(Task, id=id)
-    # return HttpResponse("task %s" % task.title)
-    
-    return render(request,'task.html', {'task': task})
-
+    """
+    Vista informativa sobre las claves CIE-10 y manual de uso.
+    """
+    return render(request, 'proyects.html')
 
 def create_task(request):
-    datos = None
-    cie_id = 'C50'  # Valor por defecto
+    """
+    Vista para buscar datos específicos por CIE-10 y mostrarlos en tabla.
+    """
+    datos = []
+    cie_id = 'C50' 
     form = CIE10Form(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
         cie_id = form.cleaned_data['cie_id'] or 'C50'
     
+    # Usamos la lógica profesional de tabla.py que refactorizamos
     df = obtener_datos_por_cie(cie_id)
-    datos = df.to_dict(orient='records') if not df.empty else []
+    if not df.empty:
+        datos = df.to_dict(orient='records')
 
     context = {
         'form': form,
@@ -121,54 +80,47 @@ def create_task(request):
         'cie_id': cie_id
     }
     return render(request, 'create_task.html', context)
-    
-
 
 
 def tasks_view(request):
-    mensaje = ''
     if request.method == 'POST':
         form = ArchivoOncologiaForm(request.POST, request.FILES)
         if form.is_valid():
-            archivo_csv = form.cleaned_data['archivo_csv']
-            archivo_geojson = form.cleaned_data['archivo_geojson']
+            archivo_csv = request.FILES.get('archivo_csv')
+            archivo_geojson = request.FILES.get('archivo_geojson')
             clave_cie = form.cleaned_data['clave_cie']
 
             try:
-                procesar_y_guardar_csv(archivo_csv)
-                generar_mapa_desde_bd_y_geojson(archivo_geojson, clave_cie)
-                mensaje = '✅ Archivos procesados y mapa generado correctamente.'
-                return redirect('tasks')
+                # 1. Guardado temporal de archivos subidos
+                path_csv = default_storage.save('temp/analisis.csv', ContentFile(archivo_csv.read()))
+                full_csv = os.path.join(settings.MEDIA_ROOT, path_csv)
+                
+                full_geo = None
+                if archivo_geojson:
+                    path_geo = default_storage.save('temp/analisis.json', ContentFile(archivo_geojson.read()))
+                    full_geo = os.path.join(settings.MEDIA_ROOT, path_geo)
+
+                # 2. Generar el mapa
+                mapa_obj = generar_mapa_calor(full_csv, clave_cie, full_geo)
+
+                # 3. GUARDAR CON UN NOMBRE DIFERENTE PARA NO SOBRESCRIBIR NADA
+                # Usamos 'mapa_temporal.html' para la pestaña de carga
+                ruta_salida = os.path.join(settings.BASE_DIR, 'mapeo', 'static', 'mapa_temporal.html')
+                mapa_obj.save(ruta_salida)
+
+                # 4. Limpiar temporales de la carpeta media
+                default_storage.delete(path_csv)
+                if full_geo: default_storage.delete(path_geo)
+
+                return redirect('ver_mapa')
+
             except Exception as e:
-                mensaje = f'❌ Error: {e}'
+                return render(request, 'task.html', {'form': form, 'mensaje': f"Error: {e}"})
     else:
         form = ArchivoOncologiaForm()
-
-    return render(request, 'task.html', {'form': form, 'mensaje': mensaje})
-
-
-def create_proyect(request):
-    if request.method == 'GET':
-        return render(request, 'layouts/create_proyect.html', {'forms': CreateNewProyecto()})
-    else:
-        form = CreateNewProyecto(request.POST)
-        if form.is_valid():
-            proyecto.objects.create(
-                name=form.cleaned_data['name']
-            )
-            return redirect('proyects')
-        return render(request, 'layouts/create_proyect.html', {'forms': form})
     
+    return render(request, 'task.html', {'form': form})
 
-
-
-
-
-
-
-
-
-
-
-
-
+def ver_mapa(request):
+    # Esta vista ahora solo sirve para mostrar el mapa que acabas de cargar
+    return render(request, 'mostrar_mapa.html')

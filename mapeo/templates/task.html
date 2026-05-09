@@ -4,21 +4,114 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/task.css' %}">
 
-<div class="task-container">
+<style>
+    .task-container {
+        background-color: #0d0d0d; /* Negro profundo */
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    
+    h1 { color: #00bfa5; font-weight: 700; margin-bottom: 30px; }
 
+    .form-group label { color: white; font-weight: bold; display: block; margin-bottom: 8px; }
+    
+    .help-box {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+    }
+
+    .example-table {
+        width: 100%;
+        font-size: 0.8rem;
+        color: white;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    .example-table th { color: #d4af37; border-bottom: 1px solid #444; padding: 5px; }
+    .example-table td { padding: 5px; border-bottom: 1px solid #222; }
+
+    .btn-download {
+        color: #d4af37;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    .btn-download:hover { text-decoration: underline; }
+
+    button[type="submit"] {
+        background-color: #006657;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: bold;
+        width: 100%;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="task-container">
     <h1>Centro de Procesamiento de Datos</h1>
 
     <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+        {% csrf_token %}
 
-    {% for field in form %}
-        <div class="form-group">
-            {{ field.label_tag }}
-            {{ field }}
-        </div>
-    {% endfor %}
+        {% for field in form %}
+            <div class="form-group mb-4">
+                {{ field.label_tag }}
+                {{ field }}
 
-    <button type="submit">Cargar Datos</button>
-</form>
+                {% if "csv" in field.name|lower or "datos" in field.name|lower %}
+                <div class="help-box">
+                    <p class="mb-1" style="color: #00bfa5; font-size: 0.85rem;">
+                        <i class="bi bi-table"></i> Estructura requerida del archivo:
+                    </p>
+                    <table class="example-table">
+                        <thead>
+                            <tr>
+                                <th>CVE_ENT</th>
+                                <th>CVE_MUN</th>
+                                <th>MUNICIPIO</th>
+                                <th>CIE_10</th>
+                                <th>SEXO</th>
+                                <th>CASOS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>14</td>
+                                <td>039</td>
+                                <td>Guadalajara</td>
+                                <td>C50</td>
+                                <td>Femenino</td>
+                                <td>12</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted small mt-2 mb-0 italic">* Los encabezados deben ser idénticos a los de la tabla.</p>
+                </div>
+                {% endif %}
+
+                {% if "geojson" in field.name|lower or "mapa" in field.name|lower %}
+                <div class="mt-2">
+                    <span class="small text-white-50">¿No tienes el archivo geográfico?</span>
+                    <a href="https://www.inegi.org.mx/app/areasgeograficas/?ag=00" target="_blank" class="btn-download ms-2">
+                        Descargar de INEGI <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit">Cargar Datos</button>
+    </form>
 </div>
 {% endblock %}

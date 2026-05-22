@@ -3,20 +3,27 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/task.css' %}">
-
 <style>
     .task-container {
-        background-color: #0d0d0d; /* Negro profundo */
+        background-color: #0d0d0d;
         color: white;
         padding: 40px;
         border-radius: 20px;
         box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        max-width: 1100px;
+        margin: auto;
     }
-    
-    h1 { color: #00bfa5; font-weight: 700; margin-bottom: 30px; }
-
-    .form-group label { color: white; font-weight: bold; display: block; margin-bottom: 8px; }
-    
+    h1 {
+        color: #00bfa5;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+    .form-group label {
+        color: white;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
     .help-box {
         background-color: #1a1a1a;
         border: 1px solid #333;
@@ -24,7 +31,6 @@
         padding: 15px;
         margin-top: 10px;
     }
-
     .example-table {
         width: 100%;
         font-size: 0.8rem;
@@ -32,53 +38,71 @@
         border-collapse: collapse;
         margin-top: 10px;
     }
-
-    .example-table th { color: #d4af37; border-bottom: 1px solid #444; padding: 5px; }
-    .example-table td { padding: 5px; border-bottom: 1px solid #222; }
-
+    .example-table th {
+        color: #d4af37;
+        border-bottom: 1px solid #444;
+        padding: 5px;
+    }
+    .example-table td {
+        padding: 5px;
+        border-bottom: 1px solid #222;
+    }
     .btn-download {
         color: #d4af37;
         text-decoration: none;
         font-size: 0.9rem;
         font-weight: bold;
     }
-
     .btn-download:hover { text-decoration: underline; }
-
     button[type="submit"] {
-        background-color: #006657;
+        background: linear-gradient(135deg, #006657, #00bfa5);
         color: white;
         border: none;
-        padding: 12px 30px;
-        border-radius: 8px;
+        padding: 14px 30px;
+        border-radius: 10px;
         font-weight: bold;
         width: 100%;
         margin-top: 20px;
         cursor: pointer;
+        transition: 0.3s;
+    }
+    button[type="submit"]:hover {
+        transform: translateY(-2px);
+        opacity: 0.92;
+    }
+    .mensaje-error {
+        background: #7f1d1d;
+        border-left: 5px solid #ef4444;
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 25px;
     }
 </style>
 
-<div class="task-container">
-    <h1>Centro de Procesamiento de Datos</h1>
+<div class="container mt-4">
+    <div class="task-container">
+        <h1>Centro de Procesamiento de Datos</h1>
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        {% if mensaje %}
+        <div class="mensaje-error">{{ mensaje }}</div>
+        {% endif %}
 
-        {% for field in form %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
             <div class="form-group mb-4">
                 {{ field.label_tag }}
                 {{ field }}
 
                 {% if "csv" in field.name|lower or "datos" in field.name|lower %}
                 <div class="help-box">
-                    <p class="mb-1" style="color: #00bfa5; font-size: 0.85rem;">
-                        <i class="bi bi-table"></i> Estructura requerida del archivo:
-                    </p>
+                    <p class="mb-1" style="color:#00bfa5; font-size:0.9rem;">Estructura requerida del CSV</p>
                     <table class="example-table">
                         <thead>
                             <tr>
-                                <th>CVE_ENT</th>
-                                <th>CVE_MUN</th>
+                                <th>LAT</th>
+                                <th>LON</th>
                                 <th>MUNICIPIO</th>
                                 <th>CIE_10</th>
                                 <th>SEXO</th>
@@ -87,31 +111,29 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>14</td>
-                                <td>039</td>
-                                <td>Guadalajara</td>
+                                <td>16.7569</td>
+                                <td>-93.1292</td>
+                                <td>Tuxtla Gutiérrez</td>
                                 <td>C50</td>
                                 <td>Femenino</td>
                                 <td>12</td>
                             </tr>
                         </tbody>
                     </table>
-                    <p class="text-muted small mt-2 mb-0 italic">* Los encabezados deben ser idénticos a los de la tabla.</p>
+                    <p class="text-muted small mt-2 mb-0">* Las columnas deben llamarse exactamente igual.</p>
                 </div>
                 {% endif %}
 
                 {% if "geojson" in field.name|lower or "mapa" in field.name|lower %}
                 <div class="mt-2">
-                    <span class="small text-white-50">¿No tienes el archivo geográfico?</span>
-                    <a href="https://www.inegi.org.mx/app/areasgeograficas/?ag=00" target="_blank" class="btn-download ms-2">
-                        Descargar de INEGI <i class="bi bi-box-arrow-up-right"></i>
-                    </a>
+                    <span class="small text-white-50">¿No tienes el archivo GeoJSON?</span>
+                    <a href="https://www.inegi.org.mx/app/areasgeograficas/?ag=00" target="_blank" class="btn-download ms-2">Descargar de INEGI</a>
                 </div>
                 {% endif %}
             </div>
-        {% endfor %}
-
-        <button type="submit">Cargar Datos</button>
-    </form>
+            {% endfor %}
+            <button type="submit">Generar Mapa Epidemiológico</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

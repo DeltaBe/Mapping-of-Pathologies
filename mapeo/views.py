@@ -1,4 +1,5 @@
 import time
+import traceback
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
@@ -86,44 +87,65 @@ def create_task(request):
 
 
 def tasks_view(request):
+    mensaje = None
     if request.method == 'POST':
         form = ArchivoOncologiaForm(request.POST, request.FILES)
         if form.is_valid():
             archivo_csv = request.FILES.get('archivo_csv')
             archivo_geojson = request.FILES.get('archivo_geojson')
             clave_cie = form.cleaned_data['clave_cie']
-
             try:
-                # 1. Guardado temporal de archivos subidos
+                # =====================================
+                # VALIDAR Y GUARDAR CSV TEMPORAL
+                # =====================================
+                if not archivo_csv:
+                    raise Exception("Debes subir un archivo CSV.")
+                
                 path_csv = default_storage.save('temp/analisis.csv', ContentFile(archivo_csv.read()))
                 full_csv = os.path.join(settings.MEDIA_ROOT, path_csv)
                 
+                # =====================================
+                # GUARDAR GEOJSON SI EXISTE
+                # =====================================
                 full_geo = None
                 if archivo_geojson:
-                    path_geo = default_storage.save('temp/analisis.json', ContentFile(archivo_geojson.read()))
+                    path_geo = default_storage.save('temp/analisis.geojson', ContentFile(archivo_geojson.read()))
                     full_geo = os.path.join(settings.MEDIA_ROOT, path_geo)
-
-                # 2. Generar el mapa
+                
+                # =====================================
+                # GENERAR Y GUARDAR MAPA
+                # =====================================
                 mapa_obj = generar_mapa_calor(full_csv, clave_cie, full_geo)
-
-                # 3. GUARDAR CON UN NOMBRE DIFERENTE PARA NO SOBRESCRIBIR NADA
-                # Usamos 'mapa_temporal.html' para la pestaña de carga
+                if mapa_obj is None:
+                    raise Exception("No se pudo generar el mapa.")
+                
                 ruta_salida = os.path.join(settings.BASE_DIR, 'mapeo', 'static', 'mapa_temporal.html')
+                
+                if os.path.exists(ruta_salida):
+                    try: os.remove(ruta_salida)
+                    except: pass
+                
                 mapa_obj.save(ruta_salida)
-
-                # 4. Limpiar temporales de la carpeta media
+                
+                # =====================================
+                # LIMPIEZA Y REDIRECCIÓN
+                # =====================================
                 default_storage.delete(path_csv)
-                if full_geo: default_storage.delete(path_geo)
-
+                if full_geo:
+                    default_storage.delete(path_geo)
+                
                 return redirect('ver_mapa')
-
             except Exception as e:
-                return render(request, 'task.html', {'form': form, 'mensaje': f"Error: {e}"})
+                print("\n========== ERROR COMPLETO ==========\n")
+                print(traceback.format_exc())
+                print("\n====================================\n")
+                mensaje = f"Error: {e}"
     else:
         form = ArchivoOncologiaForm()
     
-    return render(request, 'task.html', {'form': form})
+    return render(request, 'task.html', {'form': form, 'mensaje': mensaje})
 
 def ver_mapa(request):
-    # Esta vista ahora solo sirve para mostrar el mapa que acabas de cargar
-    return render(request, 'mostrar_mapa.html')
+    return render(request, 'mostrar_mapa.html', {'timestamp': time.time()})
+
+

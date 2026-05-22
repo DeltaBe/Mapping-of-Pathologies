@@ -1,5 +1,4 @@
 /* static/css/task.css */
-
 :root {
     --primary-accent: #004d43; /* Un verde más oscuro para contraste */
     --secondary-accent: #d4af37; /* Dorado sutil para resaltar */
@@ -55,3 +54,4 @@
     margin-right: 10px;
     font-weight: bold;
 }
+
